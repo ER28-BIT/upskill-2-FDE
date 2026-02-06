@@ -82,8 +82,11 @@ KPI_VIEWS = {
 def create_kpi_views(engine):
     """Create all KPI views in the database."""
     from sqlalchemy import text
+    from src.database.connection import get_engine
     
-    with engine.connect() as conn:
+    eng = engine if engine else get_engine()
+    
+    with eng.connect() as conn:
         for view_name, view_sql in KPI_VIEWS.items():
             try:
                 conn.execute(text(view_sql))
@@ -96,8 +99,11 @@ def create_kpi_views(engine):
 def drop_kpi_views(engine):
     """Drop all KPI views from the database."""
     from sqlalchemy import text
+    from src.database.connection import get_engine
     
-    with engine.connect() as conn:
+    eng = engine if engine else get_engine()
+    
+    with eng.connect() as conn:
         for view_name in KPI_VIEWS.keys():
             try:
                 conn.execute(text(f"DROP VIEW IF EXISTS {view_name};"))

@@ -116,7 +116,7 @@ class RiskPredictor:
                 customer_id=event.customer_id,
                 event_type=event.event_type,
                 value=event.value,
-                metadata=event.metadata
+                metadata=event.event_metadata
             )
             event.risk_score = prediction['risk_score']
             updated += 1

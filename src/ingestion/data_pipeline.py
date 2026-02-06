@@ -94,7 +94,7 @@ class DataIngestion:
                     timestamp=event_data.get('timestamp', datetime.utcnow()),
                     value=event_data.get('value'),
                     status=event_data['status'],
-                    metadata=event_data.get('metadata', {})
+                    event_metadata=event_data.get('metadata', {})
                 )
                 self.db.add(event)
                 inserted_count += 1

@@ -1,5 +1,5 @@
 """Pydantic models for API validation."""
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional, Dict, Any
 from datetime import datetime
 
@@ -12,14 +12,16 @@ class EventCreate(BaseModel):
     status: str = Field(..., description="Event status (e.g., 'success', 'failed', 'pending')")
     metadata: Optional[Dict[str, Any]] = None
     
-    @validator('event_type')
+    @field_validator('event_type')
+    @classmethod
     def validate_event_type(cls, v):
         allowed_types = ['transaction', 'login', 'logout', 'error', 'warning', 'info']
         if v not in allowed_types:
             raise ValueError(f"event_type must be one of {allowed_types}")
         return v
     
-    @validator('status')
+    @field_validator('status')
+    @classmethod
     def validate_status(cls, v):
         allowed_statuses = ['success', 'failed', 'pending', 'cancelled']
         if v not in allowed_statuses:
@@ -28,18 +30,17 @@ class EventCreate(BaseModel):
 
 class EventResponse(BaseModel):
     """Schema for event response."""
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     event_type: str
     customer_id: str
     timestamp: datetime
     value: Optional[float]
     status: str
-    metadata: Optional[Dict[str, Any]]
+    event_metadata: Optional[Dict[str, Any]]
     risk_score: Optional[float]
     created_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 class RiskPredictionRequest(BaseModel):
     """Schema for risk prediction request."""

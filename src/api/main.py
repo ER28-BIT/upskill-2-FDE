@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List
 import os
 
-from src.database.connection import get_db, init_db, engine
+from src.database.connection import get_db, init_db, get_engine
 from src.database.views import create_kpi_views
 from src.models.api_models import (
     EventCreate, EventResponse, RiskPredictionRequest, 
@@ -29,7 +29,7 @@ rag_copilot = RAGCopilot()
 async def startup_event():
     """Initialize database and views on startup."""
     init_db()
-    create_kpi_views(engine)
+    create_kpi_views(get_engine())
     print("Database initialized and KPI views created")
 
 @app.get("/")
@@ -63,7 +63,7 @@ async def create_event(event: EventCreate, db: Session = Depends(get_db)):
             timestamp=event.timestamp,
             value=event.value,
             status=event.status,
-            metadata=event.metadata
+            event_metadata=event.metadata
         )
         db.add(db_event)
         db.commit()
