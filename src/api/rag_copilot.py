@@ -3,7 +3,6 @@ import os
 from typing import List, Dict, Any
 from pathlib import Path
 import chromadb
-from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
 class RAGCopilot:
@@ -16,11 +15,8 @@ class RAGCopilot:
         # Initialize embedding model
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        # Initialize ChromaDB
-        self.client = chromadb.Client(Settings(
-            chroma_db_impl="duckdb+parquet",
-            persist_directory="./chroma_db"
-        ))
+        # Initialize ChromaDB with PersistentClient
+        self.client = chromadb.PersistentClient(path="./chroma_db")
         
         # Get or create collection
         try:

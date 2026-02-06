@@ -11,7 +11,7 @@
 ### 1. Clone and Setup
 
 ```bash
-git clone https://github.com/ER28-BIT/upskill-2-FDE.git
+git clone <YOUR_REPO_URL>
 cd upskill-2-FDE
 ./setup.sh
 ```
