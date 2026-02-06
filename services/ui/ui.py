@@ -320,10 +320,6 @@ with tab3:
             for j, source in enumerate(result['sources'], 1):
                 st.markdown(f"**Source {j}: {source['document']}** (Score: {source['score']:.3f})")
                 st.markdown(f"> {source['excerpt']}")
-                
-                with st.expander(f"View full content"):
-                    st.text(source['content'][:1000] + "..." if len(source['content']) > 1000 else source['content'])
-                
                 st.markdown("")
     
     if not st.session_state['chat_history']:
