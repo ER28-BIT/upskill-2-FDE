@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: fde_user
+      POSTGRES_PASSWORD: fde_pass
+      POSTGRES_DB: fde_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fde_user -d fde_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ingest:
+    build: ./services/ingest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://fde_user:fde_pass@postgres:5432/fde_db
+    volumes:
+      - ./data:/data
+
+  api:
+    build: ./services/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://fde_user:fde_pass@postgres:5432/fde_db
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  rag:
+    build: ./services/rag
+    volumes:
+      - ./data/docs:/data/docs
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  ui:
+    build: ./services/ui
+    depends_on:
+      - api
+      - rag
+      - postgres
+    environment:
+      API_URL: http://api:8000
+      RAG_URL: http://rag:8001
+      DATABASE_URL: postgresql://fde_user:fde_pass@postgres:5432/fde_db
+    ports:
+      - "8501:8501"
+
+volumes:
+  postgres_data:
