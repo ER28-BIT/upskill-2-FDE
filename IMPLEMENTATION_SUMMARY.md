@@ -65,10 +65,10 @@ This document provides a comprehensive summary of the Forward Deployed Engineer 
 
 ## Technical Stack
 
-- **Backend**: FastAPI 0.104.1, Python 3.11+
+- **Backend**: FastAPI 0.109.1, Python 3.11+
 - **Database**: PostgreSQL 15, SQLAlchemy 2.0.23
 - **Dashboard**: Streamlit 1.28.1, Plotly 5.18.0
-- **RAG**: ChromaDB 0.4.22, Sentence Transformers 2.2.2
+- **RAG**: ChromaDB 0.4.22, Sentence Transformers 2.2.2, LangChain Community 0.3.27
 - **Validation**: Pydantic 2.5.0
 - **Deployment**: Docker Compose, Uvicorn
 - **Testing**: Pytest 7.4.3

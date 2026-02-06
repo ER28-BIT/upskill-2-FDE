@@ -1,4 +1,4 @@
-fastapi==0.104.1
+fastapi==0.109.1
 uvicorn[standard]==0.24.0
 streamlit==1.28.1
 psycopg2-binary==2.9.9
@@ -10,8 +10,8 @@ python-dotenv==1.0.0
 pytest==7.4.3
 httpx==0.25.2
 langchain==0.1.0
-langchain-community==0.0.10
+langchain-community==0.3.27
 sentence-transformers==2.2.2
 chromadb==0.4.22
-python-multipart==0.0.6
+python-multipart==0.0.22
 plotly==5.18.0
